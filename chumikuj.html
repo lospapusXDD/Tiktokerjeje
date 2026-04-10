@@ -168,6 +168,17 @@ nav {
   position: relative;
 }
 
+.hero-logo {
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--primary2);
+  box-shadow: 0 0 40px rgba(168,85,247,0.4), 0 0 80px rgba(168,85,247,0.15);
+  margin-bottom: 24px;
+  opacity: 0;
+  animation: fadeUp .6s .1s ease forwards;
+}
+
 .hero-eyebrow {
   font-family: 'Share Tech Mono', monospace;
   font-size: 11px; letter-spacing: 5px;
@@ -493,8 +504,8 @@ nav {
 }
 
 .creator-card {
-  background: var(--card);
-  border: 1px solid var(--border);
+  background: linear-gradient(135deg, rgba(255,105,180,0.08), rgba(255,182,193,0.04));
+  border: 1px solid rgba(255,105,180,0.25);
   border-radius: 20px;
   padding: 40px;
   display: flex; align-items: center; gap: 36px;
@@ -504,24 +515,29 @@ nav {
 .creator-card::before {
   content: '';
   position: absolute; inset: 0;
-  background: radial-gradient(ellipse at right, rgba(245,158,11,0.05) 0%, transparent 60%);
+  background: radial-gradient(ellipse at right, rgba(255,105,180,0.06) 0%, transparent 60%);
   pointer-events: none;
 }
 
 .creator-avatar {
   width: 90px; height: 90px;
   border-radius: 50%;
-  border: 2px solid var(--border);
-  background: linear-gradient(135deg, var(--primary), var(--accent));
+  border: 2px solid rgba(255,105,180,0.4);
+  background: linear-gradient(135deg, #ff69b4, #ffb6c1);
   display: flex; align-items: center; justify-content: center;
   font-size: 36px; flex-shrink: 0;
   position: relative;
+  overflow: hidden;
+}
+.creator-avatar img {
+  width: 100%; height: 100%;
+  object-fit: cover; border-radius: 50%;
 }
 .creator-avatar::after {
   content: '';
   position: absolute; inset: -4px;
   border-radius: 50%;
-  border: 1px solid rgba(124,58,237,0.2);
+  border: 1px solid rgba(255,105,180,0.3);
   animation: rotateBorder 4s linear infinite;
 }
 @keyframes rotateBorder {
@@ -532,29 +548,29 @@ nav {
 .creator-by {
   font-family: 'Share Tech Mono', monospace;
   font-size: 10px; letter-spacing: 4px;
-  color: var(--primary2); margin-bottom: 6px;
+  color: #ff69b4; margin-bottom: 6px;
 }
 .creator-name {
   font-family: 'Orbitron', sans-serif;
   font-size: 24px; font-weight: 900;
   color: #fff; margin-bottom: 8px;
 }
-.creator-name span { color: var(--accent); }
+.creator-name span { color: #ff69b4; }
 .creator-desc {
-  font-size: 14px; color: var(--dim);
+  font-size: 14px; color: rgba(255,200,220,0.7);
   line-height: 1.6; max-width: 480px;
 }
 
 .creator-badge {
   display: inline-flex; align-items: center; gap: 6px;
   margin-top: 14px;
-  background: rgba(245,158,11,0.1);
-  border: 1px solid rgba(245,158,11,0.25);
+  background: rgba(255,105,180,0.12);
+  border: 1px solid rgba(255,105,180,0.3);
   border-radius: 6px;
   padding: 5px 12px;
   font-family: 'Orbitron', sans-serif;
   font-size: 9px; letter-spacing: 2px;
-  color: var(--accent);
+  color: #ff69b4;
 }
 
 /* ════════════════════════════════════════════
@@ -649,7 +665,7 @@ nav {
     <li><a href="#inicio">Inicio</a></li>
     <li><a href="#contenido">Contenido</a></li>
     <li><a href="#lives">Lives</a></li>
-    <li><a href="#creador">Creador</a></li>
+    <li><a href="#creadora">Creadora</a></li>
   </ul>
   <div class="nav-live">
     <div class="live-dot" id="live-indicator"></div>
@@ -662,19 +678,20 @@ nav {
 
   <!-- ══ HERO ══ -->
   <section class="hero" id="inicio">
-    <div class="hero-eyebrow">// CANAL OFICIAL — YOUTUBE & TIKTOK</div>
+    <img src="chumikuj_logo.jpeg" alt="chumikuj" class="hero-logo">
+    <div class="hero-eyebrow">// CANAL OFICIAL — TIKTOK</div>
     <h1 class="hero-name">
       <span class="c1">chumi</span><span class="c2">kuj</span>
       <span class="c3">jujutsu shenanigans</span>
     </h1>
     <p class="hero-desc">
-      Youtuber de 12 años. Temáticas, escondidas, retos y todo lo que
+      Tiktoker de 12 años. Temáticas, escondidas, retos y todo lo que
       puedas imaginar dentro de Jujutsu Shenanigans. Contenido divertido,
       caos puro y lives impredecibles.
     </p>
     <div class="hero-btns">
-      <a href="https://youtube.com/@chumikuj" target="_blank" rel="noopener" class="btn btn-primary">
-        <i class="fab fa-youtube"></i> VER CANAL
+      <a href="https://www.tiktok.com/@yelsifrias" target="_blank" rel="noopener" class="btn btn-primary">
+        <i class="fab fa-tiktok"></i> VER TIKTOK
       </a>
       <a href="#lives" class="btn btn-outline">HORARIO DE LIVES</a>
     </div>
@@ -702,7 +719,7 @@ nav {
         <div class="live-meta">
           <div class="meta-row">
             <i class="fas fa-clock"></i>
-            <span>Maximo hasta las <strong style="color:#fff">2:00 PM</strong> si es de dia</span>
+            <span>Puede empezar live hasta las <strong style="color:#fff">2:00 PM</strong> como máximo de día</span>
           </div>
           <div class="meta-row">
             <i class="fas fa-moon"></i>
@@ -710,11 +727,11 @@ nav {
           </div>
           <div class="meta-row">
             <i class="fas fa-gamepad"></i>
-            <span>Plataforma: <strong style="color:#fff">YouTube & TikTok</strong></span>
+            <span>Plataforma: <strong style="color:#fff">TikTok</strong></span>
           </div>
           <div class="meta-row">
-            <i class="fab fa-youtube" style="color:#ff4444"></i>
-            <span>Activa las notificaciones para no perderte nada</span>
+            <i class="fab fa-tiktok" style="color:#ff4466"></i>
+            <span>Activa las notificaciones en TikTok para no perderte nada</span>
           </div>
         </div>
       </div>
@@ -723,8 +740,8 @@ nav {
         <div class="schedule-title">POSIBLES HORARIOS</div>
         <div class="schedule-item">
           <div class="sch-dot"></div>
-          <div class="sch-time">MANANA</div>
-          <div class="sch-label">Antes de las 2:00 PM</div>
+          <div class="sch-time">MAÑANA</div>
+          <div class="sch-label">Puede empezar hasta las 2:00 PM</div>
         </div>
         <div class="schedule-item">
           <div class="sch-dot" style="background:var(--accent)"></div>
@@ -739,7 +756,7 @@ nav {
         <div class="schedule-item">
           <div class="sch-dot" style="background:var(--green)"></div>
           <div class="sch-time">NOTIF</div>
-          <div class="sch-label">Activa el timbre en YouTube</div>
+          <div class="sch-label">Activa notificaciones en TikTok</div>
         </div>
       </div>
     </div>
@@ -751,8 +768,8 @@ nav {
   <section class="stats-section reveal">
     <div class="stats-row">
       <div class="stat-card">
-        <div class="stat-num">12<span class="suf">anos</span></div>
-        <div class="stat-label">Edad del creador</div>
+        <div class="stat-num">418<span class="suf">+</span></div>
+        <div class="stat-label">Seguidores en TikTok</div>
       </div>
       <div class="stat-card">
         <div class="stat-num">JJK<span class="suf"></span></div>
@@ -763,8 +780,8 @@ nav {
         <div class="stat-label">Limite de live diurno</div>
       </div>
       <div class="stat-card">
-        <div class="stat-num">24<span class="suf">h</span></div>
-        <div class="stat-label">Posible live nocturno</div>
+        <div class="stat-num">12<span class="suf">años</span></div>
+        <div class="stat-label">Edad del tiktoker</div>
       </div>
     </div>
   </section>
@@ -819,12 +836,12 @@ nav {
 
       <div class="content-card">
         <span class="card-icon" id="icon-ytk"></span>
-        <div class="card-title">YOUTUBE & TIKTOK</div>
+        <div class="card-title">TIKTOK</div>
         <div class="card-desc">
-          Contenido en ambas plataformas. Clips, momentos destacados
-          y lives tanto en YouTube como en TikTok.
+          Todo el contenido se sube a TikTok. Clips, momentos destacados
+          y lives en directo para la comunidad.
         </div>
-        <span class="card-tag">// MULTIPLATAFORMA</span>
+        <span class="card-tag">// PLATAFORMA PRINCIPAL</span>
       </div>
 
       <div class="content-card">
@@ -843,23 +860,23 @@ nav {
   <div class="divider"></div>
 
   <!-- ══ CREADOR ══ -->
-  <section class="creator-section reveal" id="creador">
-    <div class="section-label">// DETRAS DE LA PAGINA</div>
-    <h2 class="section-title">Esta web fue <span>creada por</span></h2>
+  <section class="creator-section reveal" id="creadora">
+    <div class="section-label" style="color:#ff69b4;">// DETRÁS DE LA PÁGINA ♡</div>
+    <h2 class="section-title">Esta web fue <span style="color:#ff69b4;">creada por</span></h2>
     <div class="creator-card">
-      <div class="creator-avatar" id="creator-icon"></div>
+      <div class="creator-avatar" id="creator-icon"><img src="creadora_avatar.jpg" alt="creadora"></div>
       <div class="creator-info">
-        <div class="creator-by">// DESARROLLADOR WEB</div>
-        <div class="creator-name">animefan<span>XDD</span></div>
+        <div class="creator-by">// DESARROLLADORA WEB ♡</div>
+        <div class="creator-name">animefan</div>
         <div class="creator-desc">
-          Pagina de presentacion oficial de chumikuj, disenada y desarrollada
-          por animefan. Construida con tecnologia web moderna, efectos Matrix,
+          Página de presentación oficial de chumikuj, diseñada y desarrollada
+          con mucho cariño ♡. Construida con tecnología web moderna, efectos Matrix,
           globo 3D interactivo y animaciones personalizadas para representar
-          el estilo unico del canal.
+          el estilo único del canal.
         </div>
         <div class="creator-badge">
-          <i class="fas fa-code" style="font-size:9px"></i>
-          DESARROLLADOR OFICIAL
+          <i class="fas fa-heart" style="font-size:9px"></i>
+          DESARROLLADORA OFICIAL ♡
         </div>
       </div>
     </div>
@@ -871,10 +888,10 @@ nav {
 <footer class="term-footer">
   <div class="term-line">> SISTEMA INICIALIZADO — CHUMIKUJ v1.0.0</div>
   <div class="term-line">> CANAL: JUJUTSU SHENANIGANS — TEMATICAS — ESCONDIDAS — LIVES</div>
-  <div class="term-line">> DESARROLLADO POR: animefan<span class="cursor-blink"></span></div>
+  <div class="term-line">> DESARROLLADO POR: animefan ♡<span class="cursor-blink"></span></div>
   <div class="footer-bottom">
     <span>chumikuj — Canal Oficial 2025</span>
-    <span>Web por animefan — No afiliado con Roblox Corporation</span>
+    <span>Web por animefan ♡ — No afiliado con Roblox Corporation</span>
   </div>
 </footer>
 
@@ -935,31 +952,31 @@ document.querySelectorAll('a, button, .btn').forEach(el => {
   });
 });
 
-/* ══════════════════════ MATRIX ══════════════════════ */
+/* ══════════════════════ MATRIX CORAZONES ══════════════════════ */
 (function initMatrix() {
   const canvas = document.getElementById('matrix-canvas');
   const ctx = canvas.getContext('2d');
   let W, H, cols, drops;
 
-  const JJK_CHARS = '呪術廻戦五条悟宿儺虎杖伏黒恵釘崎野薔薇01JJKSHENANIGANS漏瑚花御真人偽夏油ゲト乙骨憂太';
+  const HEART_CHARS = '♡♥💕💗💖💘💝❤🩷🤍💜🩵♡♥❣💞💓🎀✿❀';
 
   function resize() {
     W = canvas.width  = window.innerWidth;
     H = canvas.height = window.innerHeight;
-    cols  = Math.floor(W / 18);
-    drops = Array(cols).fill(1).map(() => Math.floor(Math.random() * H / 18));
+    cols  = Math.floor(W / 22);
+    drops = Array(cols).fill(1).map(() => Math.floor(Math.random() * H / 22));
   }
 
   function draw() {
-    ctx.fillStyle = 'rgba(5, 2, 15, 0.05)';
+    ctx.fillStyle = 'rgba(5, 2, 15, 0.04)';
     ctx.fillRect(0, 0, W, H);
-    ctx.font = '14px "Share Tech Mono", monospace';
+    ctx.font = '16px sans-serif';
     for (let i = 0; i < cols; i++) {
-      const ch = JJK_CHARS[Math.floor(Math.random() * JJK_CHARS.length)];
-      const x  = i * 18;
-      const y  = drops[i] * 18;
-      // Cabeza mas brillante
-      ctx.fillStyle = i % 5 === 0 ? '#a855f7' : '#7c3aed';
+      const ch = HEART_CHARS[Math.floor(Math.random() * HEART_CHARS.length)];
+      const x  = i * 22;
+      const y  = drops[i] * 22;
+      // Alternar rosa y violeta
+      ctx.fillStyle = i % 3 === 0 ? '#ff69b4' : (i % 3 === 1 ? '#a855f7' : '#ffb6c1');
       ctx.fillText(ch, x, y);
       if (y > H && Math.random() > 0.975) drops[i] = 0;
       drops[i]++;
@@ -968,7 +985,7 @@ document.querySelectorAll('a, button, .btn').forEach(el => {
 
   resize();
   window.addEventListener('resize', resize);
-  setInterval(draw, 55);
+  setInterval(draw, 65);
 })();
 
 /* ══════════════════════ LIVE STATUS ══════════════════════ */
@@ -994,8 +1011,8 @@ document.querySelectorAll('a, button, .btn').forEach(el => {
     badge.classList.add('live-now');
     badge.innerHTML = '<div class="live-dot online"></div> ZONA DE LIVE ACTIVA';
     main.textContent = isPossibleDaytime
-      ? 'Horario diurno activo — puede haber live antes de las 2 PM'
-      : 'Horario nocturno activo — podria aparecer en cualquier momento';
+      ? 'Horario diurno activo — puede empezar live hasta las 2 PM'
+      : 'Horario nocturno activo — podría aparecer en cualquier momento';
   } else {
     text.textContent = 'OFFLINE';
   }
