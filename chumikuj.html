@@ -1,0 +1,1369 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>chumikuj — Canal Oficial</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* ════════════════════════════════════════════
+   VARIABLES & RESET
+════════════════════════════════════════════ */
+    :root {
+      --primary: #7c3aed;
+      --primary2: #a855f7;
+      --accent: #f59e0b;
+      --accent2: #fbbf24;
+      --dark: #05020f;
+      --dark2: #0d0820;
+      --dark3: #130c2e;
+      --card: rgba(20, 10, 45, 0.75);
+      --border: rgba(124, 58, 237, 0.25);
+      --light: #e2d9ff;
+      --dim: rgba(226, 217, 255, 0.45);
+      --green: #22c55e;
+      --red: #ef4444;
+      --matrix: #7c3aed;
+    }
+
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background: var(--dark);
+      color: var(--light);
+      overflow-x: hidden;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    body.loaded {
+      overflow-x: hidden;
+    }
+
+    ::selection {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--dark);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    /* ════════════════════════════════════════════
+   MATRIX CANVAS
+════════════════════════════════════════════ */
+    #matrix-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.07;
+    }
+
+    /* ════════════════════════════════════════════
+   GLOBE BG
+════════════════════════════════════════════ */
+    #globe-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.18;
+    }
+
+    /* ════════════════════════════════════════════
+   NOISE OVERLAY
+════════════════════════════════════════════ */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: .35;
+    }
+
+    /* ════════════════════════════════════════════
+   WRAP
+════════════════════════════════════════════ */
+    .wrap {
+      position: relative;
+      z-index: 10;
+    }
+
+    /* ════════════════════════════════════════════
+   NAV
+════════════════════════════════════════════ */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 40px;
+      background: rgba(5, 2, 15, 0.85);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--primary2);
+      letter-spacing: 3px;
+      text-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+    }
+
+    .nav-logo span {
+      color: var(--accent);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: var(--dim);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color .2s;
+      font-weight: 600;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary2);
+    }
+
+    .nav-live {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--dim);
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--red);
+      animation: pulseDot 1.4s ease-in-out infinite;
+    }
+
+    .live-dot.online {
+      background: var(--green);
+    }
+
+    @keyframes pulseDot {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: .4;
+        transform: scale(.7);
+      }
+    }
+
+    /* ════════════════════════════════════════════
+   HERO
+════════════════════════════════════════════ */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 20px 60px;
+      position: relative;
+    }
+
+    .hero-logo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--primary2);
+      box-shadow: 0 0 40px rgba(168, 85, 247, 0.4), 0 0 80px rgba(168, 85, 247, 0.15);
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp .6s .1s ease forwards;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 5px;
+      color: var(--primary2);
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeUp .6s .2s ease forwards;
+    }
+
+    .hero-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(48px, 10vw, 100px);
+      font-weight: 900;
+      line-height: .9;
+      letter-spacing: -2px;
+      margin-bottom: 18px;
+      opacity: 0;
+      animation: fadeUp .7s .4s ease forwards;
+    }
+
+    .hero-name .c1 {
+      color: #fff;
+    }
+
+    .hero-name .c2 {
+      color: transparent;
+      -webkit-text-stroke: 2px var(--primary2);
+      text-shadow: none;
+    }
+
+    .hero-name .c3 {
+      display: block;
+      color: var(--accent);
+      font-size: .5em;
+      letter-spacing: 8px;
+      -webkit-text-stroke: 0;
+      text-shadow: 0 0 40px rgba(245, 158, 11, 0.5);
+      margin-top: 8px;
+    }
+
+    .hero-desc {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--dim);
+      max-width: 520px;
+      line-height: 1.7;
+      margin-bottom: 36px;
+      opacity: 0;
+      animation: fadeUp .7s .6s ease forwards;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeUp .7s .8s ease forwards;
+    }
+
+    .btn {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      padding: 13px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all .2s;
+      font-weight: 700;
+      border: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary2));
+      color: #fff;
+      box-shadow: 0 0 30px rgba(124, 58, 237, 0.35);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 40px rgba(124, 58, 237, 0.5);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--primary2);
+      border: 1px solid var(--border);
+    }
+
+    .btn-outline:hover {
+      background: rgba(124, 58, 237, 0.1);
+      border-color: var(--primary2);
+      transform: translateY(-3px);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--dim);
+      font-size: 10px;
+      letter-spacing: 3px;
+      opacity: 0;
+      animation: fadeUp .7s 1.2s ease forwards;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 50px;
+      background: linear-gradient(to bottom, var(--primary2), transparent);
+      animation: scrollAnim 1.8s ease-in-out infinite;
+    }
+
+    @keyframes scrollAnim {
+
+      0%,
+      100% {
+        transform: scaleY(1);
+        opacity: .5;
+      }
+
+      50% {
+        transform: scaleY(.5);
+        opacity: 1;
+      }
+    }
+
+    /* ════════════════════════════════════════════
+   LIVE STATUS SECTION
+════════════════════════════════════════════ */
+    .live-section {
+      padding: 80px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 5px;
+      color: var(--primary2);
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(24px, 4vw, 38px);
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 40px;
+    }
+
+    .section-title span {
+      color: var(--primary2);
+    }
+
+    /* Live card grande */
+    .live-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      backdrop-filter: blur(12px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .live-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .live-status-block {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--red);
+      width: fit-content;
+    }
+
+    .status-badge.live-now {
+      background: rgba(34, 197, 94, 0.12);
+      border-color: rgba(34, 197, 94, 0.3);
+      color: var(--green);
+    }
+
+    .live-title-big {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 22px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.3;
+    }
+
+    .live-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .meta-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--dim);
+    }
+
+    .meta-row i {
+      color: var(--primary2);
+      width: 16px;
+      text-align: center;
+    }
+
+    .live-schedule {
+      background: rgba(124, 58, 237, 0.06);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+    }
+
+    .schedule-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 13px;
+      letter-spacing: 2px;
+      color: var(--primary2);
+      margin-bottom: 16px;
+    }
+
+    .schedule-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(124, 58, 237, 0.1);
+      font-size: 13px;
+    }
+
+    .schedule-item:last-child {
+      border-bottom: none;
+    }
+
+    .sch-time {
+      font-family: 'Share Tech Mono', monospace;
+      color: var(--accent);
+      font-size: 12px;
+      min-width: 80px;
+    }
+
+    .sch-label {
+      color: var(--light);
+      font-weight: 600;
+    }
+
+    .sch-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--primary);
+      flex-shrink: 0;
+    }
+
+    /* ════════════════════════════════════════════
+   CONTENT SECTION — TEMATICAS
+════════════════════════════════════════════ */
+    .content-section {
+      padding: 80px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 18px;
+    }
+
+    .content-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      transition: all .25s;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(8px);
+    }
+
+    .content-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--primary), var(--primary2), transparent);
+      opacity: 0;
+      transition: opacity .25s;
+    }
+
+    .content-card:hover {
+      border-color: rgba(124, 58, 237, 0.5);
+      transform: translateY(-5px);
+      box-shadow: 0 16px 40px rgba(124, 58, 237, 0.12);
+    }
+
+    .content-card:hover::after {
+      opacity: 1;
+    }
+
+    .card-icon {
+      font-size: 32px;
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .card-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 14px;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--dim);
+      line-height: 1.7;
+    }
+
+    .card-tag {
+      display: inline-block;
+      margin-top: 14px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--primary2);
+      background: rgba(124, 58, 237, 0.1);
+      border: 1px solid rgba(124, 58, 237, 0.2);
+      border-radius: 4px;
+      padding: 3px 8px;
+    }
+
+    /* ════════════════════════════════════════════
+   STATS
+════════════════════════════════════════════ */
+    .stats-section {
+      padding: 60px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px;
+      text-align: center;
+      backdrop-filter: blur(8px);
+      transition: all .2s;
+    }
+
+    .stat-card:hover {
+      border-color: rgba(124, 58, 237, 0.45);
+      transform: translateY(-3px);
+    }
+
+    .stat-num {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 36px;
+      font-weight: 900;
+      color: var(--primary2);
+      text-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+      margin-bottom: 6px;
+    }
+
+    .stat-num .suf {
+      font-size: .5em;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--dim);
+      text-transform: uppercase;
+    }
+
+    /* ════════════════════════════════════════════
+   CREADOR
+════════════════════════════════════════════ */
+    .creator-section {
+      padding: 80px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .creator-card {
+      background: linear-gradient(135deg, rgba(255, 105, 180, 0.08), rgba(255, 182, 193, 0.04));
+      border: 1px solid rgba(255, 105, 180, 0.25);
+      border-radius: 20px;
+      padding: 40px;
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      backdrop-filter: blur(12px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .creator-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at right, rgba(255, 105, 180, 0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .creator-avatar {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 105, 180, 0.4);
+      background: linear-gradient(135deg, #ff69b4, #ffb6c1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .creator-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .creator-avatar::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 105, 180, 0.3);
+      animation: rotateBorder 4s linear infinite;
+    }
+
+    @keyframes rotateBorder {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .creator-info {
+      flex: 1;
+    }
+
+    .creator-by {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: #ff69b4;
+      margin-bottom: 6px;
+    }
+
+    .creator-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 24px;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .creator-name span {
+      color: #ff69b4;
+    }
+
+    .creator-desc {
+      font-size: 14px;
+      color: rgba(255, 200, 220, 0.7);
+      line-height: 1.6;
+      max-width: 480px;
+    }
+
+    .creator-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 14px;
+      background: rgba(255, 105, 180, 0.12);
+      border: 1px solid rgba(255, 105, 180, 0.3);
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: #ff69b4;
+    }
+
+    /* ════════════════════════════════════════════
+   TERMINAL FOOTER
+════════════════════════════════════════════ */
+    .term-footer {
+      border-top: 1px solid var(--border);
+      background: rgba(5, 2, 15, 0.9);
+      padding: 30px 40px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .term-line {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      color: rgba(124, 58, 237, 0.5);
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .term-line .cursor-blink {
+      display: inline-block;
+      width: 8px;
+      height: 14px;
+      background: var(--primary2);
+      animation: blink .8s step-end infinite;
+      vertical-align: middle;
+      margin-left: 4px;
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0;
+      }
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(124, 58, 237, 0.08);
+      font-size: 11px;
+      color: rgba(226, 217, 255, 0.25);
+      letter-spacing: 1px;
+    }
+
+/* ════════════════════════════════════════════
+   REGLAS DE LIVE
+════════════════════════════════════════════ */
+.rules-section {
+  padding: 80px 40px;
+  max-width: 1100px; margin: 0 auto;
+}
+
+.rules-card {
+  background: var(--card);
+  border: 1px solid rgba(239,68,68,0.2);
+  border-radius: 20px;
+  padding: 36px;
+  backdrop-filter: blur(16px);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.03);
+}
+.rules-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(239,68,68,0.05) 0%, rgba(124,58,237,0.03) 50%, transparent 100%);
+  pointer-events: none;
+}
+
+.rules-list {
+  list-style: none;
+  display: flex; flex-direction: column;
+  gap: 16px;
+}
+
+.rule-item {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 18px 20px;
+  background: rgba(239,68,68,0.04);
+  border: 1px solid rgba(239,68,68,0.1);
+  border-radius: 12px;
+  transition: all .3s cubic-bezier(.22,1,.36,1);
+}
+.rule-item:hover {
+  background: rgba(239,68,68,0.08);
+  border-color: rgba(239,68,68,0.25);
+  transform: translateX(6px);
+}
+
+.rule-num {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 14px; font-weight: 900;
+  color: #ef4444;
+  background: rgba(239,68,68,0.12);
+  border: 1px solid rgba(239,68,68,0.2);
+  border-radius: 8px;
+  min-width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.rule-text {
+  font-size: 15px; font-weight: 600;
+  color: var(--light);
+  line-height: 1.6;
+  padding-top: 6px;
+}
+.rule-text small {
+  display: block;
+  font-size: 12px;
+  color: var(--dim);
+  font-weight: 400;
+  margin-top: 4px;
+}
+
+    /* ════════════════════════════════════════════
+   DIVIDER
+════════════════════════════════════════════ */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0 40px;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* ════════════════════════════════════════════
+   ANIMATIONS
+════════════════════════════════════════════ */
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all .7s cubic-bezier(.22, 1, .36, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ════════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      nav {
+        padding: 14px 20px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .live-card {
+        grid-template-columns: 1fr;
+      }
+
+      .creator-card {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .content-section,
+      .live-section,
+      .stats-section,
+      .creator-section {
+        padding: 60px 20px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <!-- MATRIX -->
+  <canvas id="matrix-canvas"></canvas>
+
+  <!-- GLOBE BG -->
+  <div id="globe-bg"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">chumi<span>kuj</span></div>
+    <ul class="nav-links">
+      <li><a href="#inicio">Inicio</a></li>
+      <li><a href="#contenido">Contenido</a></li>
+      <li><a href="#lives">Lives</a></li>
+    <li><a href="#reglas">Reglas</a></li>
+      <li><a href="#creadora">Creadora</a></li>
+    </ul>
+    <div class="nav-live">
+      <div class="live-dot" id="live-indicator"></div>
+      <span id="live-status-text">OFFLINE</span>
+    </div>
+  </nav>
+
+  <!-- WRAP -->
+  <div class="wrap">
+
+    <!-- ══ HERO ══ -->
+    <section class="hero" id="inicio">
+      <img src="chumikuj_logo.jpeg" alt="chumikuj" class="hero-logo">
+      <div class="hero-eyebrow">// CANAL OFICIAL — TIKTOK</div>
+      <h1 class="hero-name">
+        <span class="c1">chumi</span><span class="c2">kuj</span>
+        <span class="c3">jujutsu shenanigans</span>
+      </h1>
+      <p class="hero-desc">
+        Tiktoker de 12 años. Temáticas, escondidas, retos y todo lo que
+        puedas imaginar dentro de Jujutsu Shenanigans. Contenido divertido,
+        caos puro y lives impredecibles.
+      </p>
+      <div class="hero-btns">
+        <a href="https://tiktok.com/@chumikuj" target="_blank" rel="noopener" class="btn btn-primary">
+          <i class="fab fa-tiktok"></i> VER TIKTOK
+        </a>
+        <a href="#lives" class="btn btn-outline">HORARIO DE LIVES</a>
+      </div>
+      <div class="hero-scroll">
+        <div class="scroll-line"></div>
+        SCROLL
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ══ LIVES ══ -->
+    <section class="live-section reveal" id="lives">
+      <div class="section-label">// ESTADO EN VIVO</div>
+      <h2 class="section-title">Horario de <span>Lives</span></h2>
+      <div class="live-card">
+        <div class="live-status-block">
+          <div class="status-badge" id="live-badge">
+            <div class="live-dot"></div>
+            SIN LIVE ACTIVO
+          </div>
+          <div class="live-title-big" id="live-main-text">
+            Los lives pueden aparecer en cualquier momento
+          </div>
+          <div class="live-meta">
+            <div class="meta-row">
+              <i class="fas fa-clock"></i>
+              <span>Maximo hasta las <strong style="color:#fff">2:00 PM</strong> si es de dia</span>
+            </div>
+            <div class="meta-row">
+              <i class="fas fa-moon"></i>
+              <span>De noche: <strong style="color:#fff">sin hora fija</strong> — aparece cuando quiere</span>
+            </div>
+            <div class="meta-row">
+              <i class="fas fa-gamepad"></i>
+              <span>Plataforma: <strong style="color:#fff">TikTok</strong></span>
+            </div>
+            <div class="meta-row">
+              <i class="fab fa-tiktok" style="color:#ff4466"></i>
+              <span>Activa las notificaciones en TikTok para no perderte nada</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="live-schedule">
+          <div class="schedule-title">POSIBLES HORARIOS</div>
+          <div class="schedule-item">
+            <div class="sch-dot"></div>
+            <div class="sch-time">MANANA</div>
+            <div class="sch-label">Antes de las 2:00 PM</div>
+          </div>
+          <div class="schedule-item">
+            <div class="sch-dot" style="background:var(--accent)"></div>
+            <div class="sch-time">NOCHE</div>
+            <div class="sch-label">Hora sorpresa — sin aviso</div>
+          </div>
+          <div class="schedule-item">
+            <div class="sch-dot" style="background:var(--primary2)"></div>
+            <div class="sch-time">TEMATICAS</div>
+            <div class="sch-label">Escondidas, retos y mas</div>
+          </div>
+          <div class="schedule-item">
+            <div class="sch-dot" style="background:var(--green)"></div>
+            <div class="sch-time">NOTIF</div>
+            <div class="sch-label">Activa el timbre en YouTube</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ══ REGLAS ══ -->
+    <section class="rules-section reveal" id="reglas">
+      <div class="section-label">// IMPORTANTE</div>
+      <h2 class="section-title">Reglas del <span>Live</span></h2>
+      <div class="rules-card">
+        <ul class="rules-list">
+          <li class="rule-item">
+            <div class="rule-num">1</div>
+            <div class="rule-text">
+              No spamear
+              <small>No repitas mensajes ni llenes el chat de texto innecesario</small>
+            </div>
+          </li>
+          <li class="rule-item">
+            <div class="rule-num">2</div>
+            <div class="rule-text">
+              No pedir PS tan insistente
+              <small>Pide solo 1 vez y espera la respuesta — si dice sí o no, se respeta</small>
+            </div>
+          </li>
+          <li class="rule-item">
+            <div class="rule-num">3</div>
+            <div class="rule-text">
+              No mandar textos raros
+              <small>Mantén el chat limpio y entendible para todos</small>
+            </div>
+          </li>
+          <li class="rule-item">
+            <div class="rule-num">4</div>
+            <div class="rule-text">
+              No pelear ni insultar en el chat del live
+              <small>Respeta a todos — si hay problema, se avisa al moderador</small>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ══ STATS ══ -->
+    <section class="stats-section reveal">
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-num">418<span class="suf">+</span></div>
+          <div class="stat-label">Seguidores en TikTok</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">JJK<span class="suf"></span></div>
+          <div class="stat-label">Jujutsu Shenanigans</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">2<span class="suf">pm</span></div>
+          <div class="stat-label">Limite de live diurno</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">12<span class="suf">años</span></div>
+          <div class="stat-label">Edad del tiktoker</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ══ CONTENIDO ══ -->
+    <section class="content-section reveal" id="contenido">
+      <div class="section-label">// QUE HACE CHUMIKUJ</div>
+      <h2 class="section-title">Tipo de <span>Contenido</span></h2>
+      <div class="content-grid">
+
+        <div class="content-card">
+          <span class="card-icon" id="icon-escondidas"></span>
+          <div class="card-title">ESCONDIDAS JJK</div>
+          <div class="card-desc">
+            El clasico del canal. Partidas de escondidas dentro de
+            Jujutsu Shenanigans con momentos impredecibles y mucho caos.
+          </div>
+          <span class="card-tag">// TEMATICA PRINCIPAL</span>
+        </div>
+
+        <div class="content-card">
+          <span class="card-icon" id="icon-tematicas"></span>
+          <div class="card-title">TEMATICAS</div>
+          <div class="card-desc">
+            Partidas con reglas especiales, restricciones y retos que
+            hacen cada video completamente diferente al anterior.
+          </div>
+          <span class="card-tag">// CONTENIDO ESPECIAL</span>
+        </div>
+
+        <div class="content-card">
+          <span class="card-icon" id="icon-lives"></span>
+          <div class="card-title">LIVES EN VIVO</div>
+          <div class="card-desc">
+            Lives impredecibles sin hora fija. Aparece de dia antes de
+            las 2pm o de noche cuando menos lo esperas.
+          </div>
+          <span class="card-tag">// DIRECTO</span>
+        </div>
+
+        <div class="content-card">
+          <span class="card-icon" id="icon-retos"></span>
+          <div class="card-title">RETOS Y MAS</div>
+          <div class="card-desc">
+            Retos, experimentos y cosas chéveres dentro del juego que
+            mantienen el contenido siempre fresco y divertido.
+          </div>
+          <span class="card-tag">// VARIADO</span>
+        </div>
+
+        <div class="content-card">
+          <span class="card-icon" id="icon-ytk"></span>
+          <div class="card-title">YOUTUBE & TIKTOK</div>
+          <div class="card-desc">
+            Contenido en ambas plataformas. Clips, momentos destacados
+            y lives tanto en YouTube como en TikTok.
+          </div>
+          <span class="card-tag">// MULTIPLATAFORMA</span>
+        </div>
+
+        <div class="content-card">
+          <span class="card-icon" id="icon-comunidad"></span>
+          <div class="card-title">COMUNIDAD</div>
+          <div class="card-desc">
+            Una comunidad activa que participa en los lives, sugiere
+            tematicas y hace que cada stream sea unico.
+          </div>
+          <span class="card-tag">// INTERACTIVO</span>
+        </div>
+
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ══ CREADOR ══ -->
+    <section class="creator-section reveal" id="creadora">
+      <div class="section-label" style="color:#ff69b4;">// DETRÁS DE LA PÁGINA ♡</div>
+      <h2 class="section-title">Esta web fue <span style="color:#ff69b4;">creada por</span></h2>
+      <div class="creator-card">
+        <div class="creator-avatar" id="creator-icon">🎀</div>
+        <div class="creator-info">
+          <div class="creator-by">// DESARROLLADORA WEB ♡</div>
+          <div class="creator-name">animefan<span>XDD</span></div>
+          <div class="creator-desc">
+            Página de presentación oficial de chumikuj, diseñada y desarrollada
+            con mucho cariño ♡. Construida con tecnología web moderna, efectos Matrix,
+            globo 3D interactivo y animaciones personalizadas para representar
+            el estilo único del canal.
+          </div>
+          <div class="creator-badge">
+            <i class="fas fa-heart" style="font-size:9px"></i>
+            DESARROLLADORA OFICIAL ♡
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="term-footer">
+    <div class="term-line">> SISTEMA INICIALIZADO — CHUMIKUJ v1.0.0</div>
+    <div class="term-line">> CANAL: JUJUTSU SHENANIGANS — TEMATICAS — ESCONDIDAS — LIVES</div>
+    <div class="term-line">> DESARROLLADO POR: animefan ♡<span class="cursor-blink"></span></div>
+    <div class="footer-bottom">
+      <span>chumikuj — Canal Oficial 2025</span>
+      <span>Web por animefan ♡ — No afiliado con Roblox Corporation</span>
+    </div>
+  </footer>
+
+  <!-- THREE.JS -->
+  <script src="./three_module_min.js" type="module" id="three-script"></script>
+
+  <script type="module">
+    /* ══════════════════════ GLOBE ══════════════════════ */
+    import { initGlobe } from './globe.js';
+    const globeBg = document.getElementById('globe-bg');
+    if (globeBg) {
+      const g = initGlobe(globeBg);
+      if (g && g.renderer) {
+        Object.assign(g.renderer.domElement.style, {
+          position: 'absolute', top: '0', left: '0',
+          width: '100%', height: '100%'
+        });
+        // Tono violeta para que combine
+        if (g.globe) g.globe.material.color.setHex(0x12053a);
+        if (g.wireframe) g.wireframe.material.color.setHex(0x4a1d96);
+        if (g.wireframe2) g.wireframe2.material.color.setHex(0x4a1d96);
+        if (g.atmosphere?.material?.uniforms?.atmosColor)
+          g.atmosphere.material.uniforms.atmosColor.value.setHex(0x7c3aed);
+        if (g.glow?.material?.uniforms?.glowColor)
+          g.glow.material.uniforms.glowColor.value.setHex(0xa855f7);
+      }
+    }
+  </script>
+
+  <script>
+
+
+    /* ══════════════════════ MATRIX ══════════════════════ */
+    (function initMatrix() {
+      const canvas = document.getElementById('matrix-canvas');
+      const ctx = canvas.getContext('2d');
+      let W, H, cols, drops;
+
+      const JJK_CHARS = '呪術廻戦五条悟宿儺虎杖伏黒恵釘崎野薔薇01JJKSHENANIGANS漏瑚花御真人偽夏油ゲト乙骨憂太';
+
+      function resize() {
+        W = canvas.width = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+        cols = Math.floor(W / 18);
+        drops = Array(cols).fill(1).map(() => Math.floor(Math.random() * H / 18));
+      }
+
+      function draw() {
+        ctx.fillStyle = 'rgba(5, 2, 15, 0.05)';
+        ctx.fillRect(0, 0, W, H);
+        ctx.font = '14px "Share Tech Mono", monospace';
+        for (let i = 0; i < cols; i++) {
+          const ch = JJK_CHARS[Math.floor(Math.random() * JJK_CHARS.length)];
+          const x = i * 18;
+          const y = drops[i] * 18;
+          // Cabeza mas brillante
+          ctx.fillStyle = i % 5 === 0 ? '#a855f7' : '#7c3aed';
+          ctx.fillText(ch, x, y);
+          if (y > H && Math.random() > 0.975) drops[i] = 0;
+          drops[i]++;
+        }
+      }
+
+      resize();
+      window.addEventListener('resize', resize);
+      setInterval(draw, 55);
+    })();
+
+    /* ══════════════════════ LIVE STATUS ══════════════════════ */
+    (function checkLiveStatus() {
+      const now = new Date();
+      const hour = now.getHours();
+      const min = now.getMinutes();
+      const totalMin = hour * 60 + min;
+
+      // Antes de las 2pm (0 - 14:00)
+      const isPossibleDaytime = totalMin < 14 * 60;
+      // Noche (20:00 en adelante)
+      const isPossibleNight = totalMin >= 20 * 60;
+
+      const dot = document.getElementById('live-indicator');
+      const text = document.getElementById('live-status-text');
+      const badge = document.getElementById('live-badge');
+      const main = document.getElementById('live-main-text');
+
+      if (isPossibleDaytime || isPossibleNight) {
+        dot.classList.add('online');
+        text.textContent = 'POSIBLE LIVE';
+        badge.classList.add('live-now');
+        badge.innerHTML = '<div class="live-dot online"></div> ZONA DE LIVE ACTIVA';
+        main.textContent = isPossibleDaytime
+          ? 'Horario diurno activo — puede haber live antes de las 2 PM'
+          : 'Horario nocturno activo — podria aparecer en cualquier momento';
+      } else {
+        text.textContent = 'OFFLINE';
+      }
+    })();
+
+    /* ══════════════════════ ICONOS SIN EMOJIS (se los agregas vos) ══════════════════════ */
+    // Dejados en blanco para que antigravity los personalice
+    // document.getElementById('icon-escondidas').textContent = '';
+    // document.getElementById('icon-tematicas').textContent  = '';
+    // etc.
+
+    /* ══════════════════════ SCROLL REVEAL ══════════════════════ */
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(r => observer.observe(r));
+
+    /* ══════════════════════ BODY LOADED ══════════════════════ */
+    document.addEventListener('DOMContentLoaded', () => {
+      document.body.classList.add('loaded');
+    });
+  </script>
+</body>
+
+</html>
